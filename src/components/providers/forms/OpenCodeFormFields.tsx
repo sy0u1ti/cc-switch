@@ -199,6 +199,13 @@ function supportsImageInput(model: OpenCodeModel): boolean {
   );
 }
 
+/** 是否已声明思考档位（variants）：即便模型未显式标记 reasoning，也应展示档位编辑器。 */
+function hasThinkingLevels(model: OpenCodeModel): boolean {
+  return (
+    Object.keys((model.variants ?? {}) as Record<string, unknown>).length > 0
+  );
+}
+
 /** 从档位参数体中提取人类可读的强度摘要（reasoningEffort / thinkingLevel / budget 等）。 */
 function variantSummary(value: Record<string, unknown>): string | null {
   if (!value || typeof value !== "object") return null;
@@ -1370,7 +1377,7 @@ export function OpenCodeFormFields({
                     </div>
 
                     {/* Thinking levels (model.variants), below Token Limits */}
-                    {model.reasoning === true && (
+                    {(model.reasoning === true || hasThinkingLevels(model)) && (
                       <ThinkingLevelsEditor
                         modelId={key}
                         npm={npm}

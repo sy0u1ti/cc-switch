@@ -518,6 +518,23 @@ describe("OpenCodeFormFields", () => {
     expect(nextModels["test-model"].variants).toBeUndefined();
   });
 
+  it("shows the thinking-level editor for models that already declare variants without a reasoning flag", () => {
+    renderOpenCodeForm({
+      models: {
+        "test-model": {
+          name: "Test",
+          variants: { low: { reasoningEffort: "low" } },
+        },
+      },
+    });
+
+    expandFirstModel();
+    fireEvent.click(screen.getByRole("button", { name: "Thinking levels" }));
+    expect(
+      screen.getByRole("button", { name: "Remove level low" }),
+    ).toBeInTheDocument();
+  });
+
   it("excludes structured capability keys from the extra-fields editor", () => {
     renderOpenCodeForm({
       models: {
